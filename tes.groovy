@@ -20,8 +20,14 @@ pipeline {
 
         stage('Build Images') {
             steps {
-                bat "docker build -t %DOCKER_HUB_USER%/kantin-backend:latest ./backend"
-                bat "docker build -t %DOCKER_HUB_USER%/kantin-frontend:latest ./frontend"
+                withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_ID}", 
+                                passwordVariable: 'PASS', 
+                                usernameVariable: 'USER')]) {
+                    bat 'echo %PASS%| docker login -u %USER% --password-stdin'
+                    
+                    bat "docker build -t %DOCKER_HUB_USER%/kantin-backend:latest ./backend"
+                    bat "docker build -t %DOCKER_HUB_USER%/kantin-frontend:latest ./frontend"
+                }
             }
         }
 
