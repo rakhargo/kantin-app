@@ -39,12 +39,12 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                // echo 'Deploying to Kubernetes...'
-                // bat "kubectl apply -f kantin-k8s.yaml"
                 echo 'Deploying to Kubernetes using Secret File...'
+                // Jenkins akan mengambil file 'kube-config' dan menaruhnya di folder temporary
                 withCredentials([file(credentialsId: 'kube-config', variable: 'KUBECONFIG_FILE')]) {
                     // Kita panggil kubectl dengan bendera --kubeconfig yang mengarah ke file temp tadi
                     bat 'kubectl --kubeconfig=%KUBECONFIG_FILE% apply -f kantin-k8s.yaml --validate=false'
+                    bat 'kubectl --kubeconfig=%KUBECONFIG_FILE% apply -f kantin-ingress.yaml --validate=false'
                 }
             }
         }
