@@ -2,8 +2,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: kantin-ingress
-  # annotations:
-  #   nginx.ingress.kubernetes.io/rewrite-target: /minikube addons enable ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
   - host: kantin.local
